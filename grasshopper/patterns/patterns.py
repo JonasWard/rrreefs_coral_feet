@@ -6,6 +6,11 @@ def uv_sin(u, v, w, scale_values):
 
     return sin(u/u_s) * sin(v/v_s) * sin(w/w_s) * .5 + .5
 
+def uv_gyroid_gyroid(u, v, w, scale_values):
+    s_n = uv_gyroid(u, v, w, tuple([scale_values[0] for i in range(3)])) * scale_values[1]
+
+    return uv_gyroid(u,v,w,tuple([s_n for i in range(3)]))
+
 def uv_gyroid(u, v, w, scale_values):
     u_s, v_s, w_s = scale_values
 
