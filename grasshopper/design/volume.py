@@ -8,7 +8,7 @@ from Rhino.Geometry import Point3d, Mesh, Transform, Plane
 #     def rhino_mesh(self):
 #         msh = Mesh()
 
-def pedistle(top_box_side = 500., side_h = 150., side_w = 150.):
+def pedistle(top_box_side = 500., side_h = 150., side_w = 150., top_shift = 0.):
     msh = Mesh()
     h_l = top_box_side * .5
 
@@ -16,8 +16,8 @@ def pedistle(top_box_side = 500., side_h = 150., side_w = 150.):
 
     pts = [
         Point3d(h_l + side_w, h_l + side_w, 0.),
-        Point3d(h_l, h_l, side_h),
-        Point3d(h_l, h_l, top_box_side + side_h)
+        Point3d(h_l - top_shift, h_l - top_shift, side_h - top_shift),
+        Point3d(h_l - top_shift, h_l - top_shift, top_box_side + side_h - top_shift)
     ]
 
     for i in range(4):
@@ -41,6 +41,13 @@ def pedistle(top_box_side = 500., side_h = 150., side_w = 150.):
     msh.Faces.AddFace(11, 8, 5, 2)
 
     return msh
+
+def top_box(top_box_side = 500., side_h = 150., side_w = 150., top_shift = 0.):
+    return box(
+        top_box_side - top_shift * 2.0,
+        side_h - top_shift,
+        top_box_side + side_h - top_shift
+    )
 
 def box(w, b_0, b_1):
     msh = Mesh()
@@ -71,12 +78,12 @@ def box(w, b_0, b_1):
 
     return msh
 
-def pedistle_with_tolerance(top_box_side = 500., side_w = 150., side_h = 150., extra_b_h = 100.):
+def pedistle_with_tolerance(top_box_side = 500., side_w = 150., side_h = 150., extra_b_h = 100., top_shift = 0.):
     total_b_h = side_h+extra_b_h
     total_w = side_w*total_b_h/side_h
 
     return (
-        pedistle(top_box_side, total_b_h, total_w),
+        pedistle(top_box_side, total_b_h, total_w, top_shift),
         box(top_box_side+2.*side_w, extra_b_h, total_b_h+top_box_side+side_h)
     )
 
